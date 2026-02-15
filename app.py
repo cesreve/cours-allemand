@@ -33,8 +33,20 @@ def run():
     if selected_sub_category != "Tout":
         filtered_df = filtered_df[filtered_df["sous catégorie"] == selected_sub_category]
 
-    st.subheader(f"Vocabulaire ({len(filtered_df)} mots)")
-    st.dataframe(filtered_df)
+    st.markdown("--- # Sélectionner les colonnes à afficher")
+    all_columns = df.columns.tolist()
+    default_columns = [col for col in all_columns if col not in ["catégorie", "sous catégorie"]]
+    selected_columns = st.multiselect(
+        "Colonnes",
+        all_columns,
+        default=default_columns
+    )
+
+    if selected_columns:
+        st.subheader(f"Vocabulaire ({len(filtered_df)} mots)")
+        st.dataframe(filtered_df[selected_columns])
+    else:
+        st.warning("Veuillez sélectionner au moins une colonne à afficher.")
 
 
 if __name__ == "__main__":
